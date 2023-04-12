@@ -6,6 +6,7 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from dotenv import load_dotenv, find_dotenv
 import re
 from vk_data_exchange import vk_api_data
+from work_with_db import VKinderDB
 
 load_dotenv(find_dotenv())
 token = os.getenv('ACCESS_TOKEN')
@@ -48,8 +49,8 @@ def new_message(candidate_data=None):
                     if request.lower() == '\U0000279C':
                         generator_candidates(next(candidate_data))
                     elif request.lower() == '\U00002605':
-                        chosen_candidate_list.append(next(candidate_data))
-                    elif request.lower() == 'Показать \U00002605':
+                        VKinderDB(candidate_data)
+                    elif request.lower() == 'показать \U00002605':
                         pass
                     else:
                         write_msg(user_id_list[0], 'Неопознанная команда!')
