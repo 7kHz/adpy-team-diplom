@@ -49,7 +49,8 @@ def new_message(candidate_data=None):
                     if request.lower() == '\U0000279C':
                         generator_candidates(next(candidate_data))
                     elif request.lower() == '\U00002605':
-                        VKinderDB(candidate_data)
+                        vk_db = VKinderDB(next(candidate_data))
+                        vk_db.add_favorite()
                     elif request.lower() == 'показать \U00002605':
                         pass
                     else:
