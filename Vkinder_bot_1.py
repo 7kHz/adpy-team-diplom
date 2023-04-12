@@ -41,20 +41,18 @@ def new_message(candidate_data=None):
                     write_msg(event.user_id,
                               'Добро пожаловать в Vkinder!\n\n'
                               'Введите данные для поиска через запятую в формате:\nВозраст, пол, город:')
-                    chosen_candidate_list.clear()
+                    # chosen_candidate_list.clear()
                 elif request.lower() == 'стоп':
                     break
                 elif candidate_data is not None:
-                    for candidate in candidate_data:
-                        if request.lower() == '\U0000279C':
-                            generator_candidates(candidate)
-                            break
-                        elif request.lower() == '\U00002605':
-                            chosen_candidate_list.append(candidate)
-                            generator_candidates(candidate)
-                            break
-                        else:
-                            break
+                    if request.lower() == '\U0000279C':
+                        generator_candidates(next(candidate_data))
+                    elif request.lower() == '\U00002605':
+                        chosen_candidate_list.append(next(candidate_data))
+                    elif request.lower() == 'Показать \U00002605':
+                        pass
+                    else:
+                        write_msg(user_id_list[0], 'Неопознанная команда!')
                 else:
                     if len(check_len_request) == 3:
                         input_data_list.append(request.title().strip())
@@ -98,6 +96,7 @@ def generator_candidates(candidate_dict):
                                  f'photo{candidate_dict["id"]}_'
                                  f'{candidate_dict["photos_ids"][2]}',
                       keyboard=menu_keyboard())
+            return candidate_dict
         elif len(candidate_dict['photos_ids']) == 2:
             write_msg(user_id_list[0], f'{candidate_dict["first_name"]} '
                                        f'{candidate_dict["last_name"]}'
@@ -131,3 +130,4 @@ if __name__ == '__main__':
     candidates = vk_search.search_candidates(candidate_data['age'], candidate_data['sex'], candidate_data['city'])
     generator_candidates(next(candidates))
     new_message(candidates)
+    print(chosen_candidate_list)
