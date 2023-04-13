@@ -6,14 +6,13 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from dotenv import load_dotenv, find_dotenv
 import re
 from vk_data_exchange import vk_api_data
-from time import sleep
 
 load_dotenv(find_dotenv())
 token = os.getenv('ACCESS_TOKEN')
 input_data_list = []    # список входных данных полученных от пользователя для поиска
 user_id_list = []   # значение user_id
 intermidiate_list = [] # список временного хранения кандидатов
-chosen_candidate_list = []  #список избранных кандидатов
+chosen_candidate_list = []  # список избранных кандидатов
 
 # генерация клавиатуры чат-бота
 def menu_keyboard():
@@ -59,11 +58,8 @@ def new_message(candidate_data=None):
                 else:
                     if len(check_len_request) == 3:
                         input_data_list.append(request.title().strip())
+                        write_msg(event.user_id, 'Для продолжения нажмите \U0000279C')
                         return input_data_list
-                    # elif (request.lower() == '\U0000279C' or '\U00002605') and len(check_len_request) == 0:
-                    #     write_msg(event.user_id,
-                    #               'Добро пожаловать в Vkinder!\n\n'
-                    #               'Введите данные для поиска через запятую в формате:\nВозраст, пол, город:')
                     else:
                         write_msg(event.user_id, 'Введен неверный формат данных! Повторите попытку:')
 
