@@ -14,6 +14,7 @@ user_id_list = []   # значение user_id
 intermidiate_list = [] # список временного хранения кандидатов
 chosen_candidate_list = []  # список избранных кандидатов
 
+
 # генерация клавиатуры чат-бота
 def menu_keyboard():
     keyboard = VkKeyboard(one_time=False)
