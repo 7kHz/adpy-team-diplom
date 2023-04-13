@@ -1,6 +1,14 @@
+import configparser
 from time import sleep
 import vk
-from vk_data_exchange.vk_config import vk_user_token, vk_version, vk_host
+# from vk_data_exchange.vk_config import vk_user_token, vk_version, vk_host
+
+
+config_vk = configparser.ConfigParser()
+config_vk.read("settings.ini")
+vk_user_token = config_vk["settings"]["vk_user_token"]
+vk_version = config_vk["settings"]["vk_version"]
+vk_host = config_vk["settings"]["vk_host"]
 
 
 class VKAPI:
