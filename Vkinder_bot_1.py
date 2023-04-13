@@ -10,13 +10,12 @@ from work_with_db import VKinderDB
 
 load_dotenv(find_dotenv())
 token = os.getenv('ACCESS_TOKEN')
-input_data_list = []  # список входных данных полученных от пользователя для поиска
-user_id_list = []  # значение user_id
-intermidiate_list = []  # список временного хранения кандидатов
-chosen_candidate_list = []  # список избранных кандидатов
+input_data_list = []
+user_id_list = []
+intermidiate_list = []
+chosen_candidate_list = []
 
 
-# генерация клавиатуры чат-бота
 def menu_keyboard():
     keyboard = VkKeyboard(one_time=False)
     keyboard.add_button(label='\U00002605', color=VkKeyboardColor.PRIMARY)
@@ -27,7 +26,6 @@ def menu_keyboard():
     return keyboard.get_keyboard()
 
 
-# отправка сообщений в чат-бот
 def write_msg(user_id, message, attachment=None, keyboard=None):
     vk_session.method('messages.send',
                       {'user_id': user_id, 'message': message,
@@ -35,7 +33,6 @@ def write_msg(user_id, message, attachment=None, keyboard=None):
                        'attachment': attachment, 'keyboard': keyboard})
 
 
-# получение команд от пользователя в чат-боте
 def new_message(candidate_data=None):
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW:
@@ -46,7 +43,8 @@ def new_message(candidate_data=None):
                 if request.lower() == 'начать':
                     write_msg(event.user_id,
                               'Добро пожаловать в Vkinder!\n\n'
-                              'Введите данные для поиска через запятую в формате:\nВозраст, пол, город:')
+                              'Введите данные для поиска через запятую'
+                              ' в формате:\nВозраст, пол, город:')
                 elif request.lower() == 'стоп':
                     break
                 elif candidate_data is not None:
@@ -71,10 +69,10 @@ def new_message(candidate_data=None):
                         return input_data_list
                     else:
                         write_msg(event.user_id,
-                                  'Введен неверный формат данных! Повторите попытку:')
+                                  'Введен неверный формат данных!'
+                                  ' Повторите попытку:')
 
 
-# форматирование входных данных, генерация словаря данных для поиска кандидатов
 def formatting_data(data_list_):
     join_data_list = ','.join(data_list_)
     pattern_data_list = r'(\d+)\s*\W*([Муж|Жен]+)\w+\W*(\w+)'
@@ -92,7 +90,6 @@ def formatting_data(data_list_):
     return data_dict
 
 
-# генерация информации о кандидатах в чат-бот
 def generator_candidates(candidate_dict):
     if candidate_dict:
         if len(candidate_dict['photos_ids']) == 3:
@@ -137,7 +134,6 @@ def generator_candidates(candidate_dict):
 
 
 if __name__ == '__main__':
-    token = 'vk1.a.Ghab-7n9GgMY3FCHRG1xOk1BmXKwx4xlNisj0iwWMwAt2su9XZdbAgcfUfDZOelzYQsyqec6OabrJaQMWM_q6yaSLiYhKEdOtpBleAupbC8HZngq0kviF3u3RlTbQpidDxx-UzXMrM47vCUUm_e6rX5hwX8awi2VJzQw7z0Z8JXv1VRF-dBumUMRlvJXF_7NytvJjP5t0HD76vJzU7Ue5A'
     vk_session = vk_api.VkApi(token=token)
     longpoll = VkLongPoll(vk_session)
     vk_search = vk_api_data.VKAPI()
