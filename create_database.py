@@ -53,7 +53,7 @@ class CreateDatabase:
                 cur.execute('''
                 CREATE TABLE IF NOT EXISTS photos(
                     photos_id SERIAL PRIMARY KEY,
-                    photos_ids BIGINT UNIQUE,
+                    photos_ids BIGINT,
                     candidate_id INTEGER NOT NULL 
                         REFERENCES candidates(candidate_id) ON DELETE CASCADE
                 );
