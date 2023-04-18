@@ -64,19 +64,28 @@ class VKAPI:
             owner_id=user_id,
         )
 
-        photos_to_sort = []
-        for item in response['items']:
-            photos_to_sort += [{'id': item['id'],
-                                'likes': item['likes']['count']
-                                }]
+        photos_to_sort = map(self.photo_data_to_dict, response["items"])
+        min_likes = {}
+        result_dict = {}
+        for item in photos_to_sort:
+            if len(result_dict) > 2:
+                if min_likes['likes'] < item['likes']:
+                    del result_dict[min_likes['id']]
+                    result_dict[item['id']] = item['likes']
+                    min_likes = item
+            else:
+                result_dict[item['id']] = item['likes']
+                if len(min_likes):
+                    if min_likes['likes'] > item['likes']:
+                        min_likes = item
+                else:
+                    min_likes = item
 
-        photos_to_sort.sort(key=lambda dictionary: dictionary['likes'],
-                            reverse=True)
+        return sorted(result_dict.keys(), reverse=True)
 
-        for item in photos_to_sort[:3]:
-            result += [item['id']]
-
-        return result
+    def photo_data_to_dict(self, item):
+        return {'id': item['id'],
+                'likes': item['likes']['count']}
 
     def get_city_id(self, city):
 
